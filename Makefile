@@ -1,23 +1,31 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2 -g -Iinclude
 
-SRC = $(wildcard src/*.c src/lib/*.c)
-OBJ = $(patsubst src/%.c, build/%.o, $(SRC))
+SRC_LIB = $(wildcard src/lib/*.c)
+OBJ_LIB = $(patsubst src/lib/%.c, build/lib/%.o, $(SRC_LIB))
+
+# Programma principale
+APP_SRC = src/main.c
+APP_OBJ = build/main.o
 
 TEST_SRC = $(wildcard tests/*.c)
 TEST_OBJ = $(patsubst tests/%.c, build/tests/%.o, $(TEST_SRC))
 
 all: build/app/demo
 
-build/app/demo: $(OBJ)
+build/app/demo: $(APP_OBJ) $(OBJ_LIB)
 	mkdir -p build/app
 	$(CC) $(CFLAGS) -o $@ $^
 
-build/%.o: src/%.c
+build/main.o: src/main.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/tests/tests: $(OBJ) $(TEST_OBJ)
+build/lib/%.o: src/lib/%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/tests/tests: $(OBJ_LIB) $(TEST_OBJ)
 	mkdir -p build/tests
 	$(CC) $(CFLAGS) -o $@ $^
 
