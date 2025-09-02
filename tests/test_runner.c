@@ -7,10 +7,11 @@ int main(void) {
     printf("Running simple tests...\n");
 
     // Test vector
-    Vec v;
+    IntVector v;
     vec_init(&v);
     vec_push(&v, 10);
     vec_push(&v, 20);
+
     assert(v.size == 2);
     assert(v.data[0] == 10);
     assert(v.data[1] == 20);
